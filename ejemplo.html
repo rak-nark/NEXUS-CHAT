@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nexus Chat - Interfaz Principal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#0f0069",
+                        "inverse-surface": "#d4e4fa",
+                        "tertiary": "#bcc7de",
+                        "surface": "#051424",
+                        "outline": "#918fa1",
+                        "on-error": "#690005",
+                        "surface-container-low": "#0d1c2d",
+                        "on-secondary-fixed": "#001f26",
+                        "on-background": "#d4e4fa",
+                        "primary": "#c3c0ff",
+                        "surface-container": "#122131",
+                        "on-tertiary-fixed": "#111c2d",
+                        "surface-container-high": "#1c2b3c",
+                        "primary-container": "#4f46e5",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "secondary-container": "#03b5d3",
+                        "on-tertiary-fixed-variant": "#3c475a",
+                        "on-error-container": "#ffdad6",
+                        "background": "#051424",
+                        "primary-fixed": "#e2dfff",
+                        "surface-bright": "#2c3a4c",
+                        "surface-variant": "#273647",
+                        "surface-tint": "#c3c0ff",
+                        "on-primary": "#1d00a5",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "surface-container-highest": "#273647",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "on-secondary-container": "#00424e",
+                        "error-container": "#93000a",
+                        "surface-dim": "#051424",
+                        "on-primary-container": "#dad7ff",
+                        "on-tertiary": "#263143",
+                        "secondary": "#4cd7f6",
+                        "inverse-primary": "#4d44e3",
+                        "on-secondary": "#003640",
+                        "outline-variant": "#464555",
+                        "tertiary-fixed": "#d8e3fb",
+                        "surface-container-lowest": "#010f1f",
+                        "on-surface-variant": "#c7c4d8",
+                        "on-surface": "#d4e4fa",
+                        "secondary-fixed": "#acedff",
+                        "inverse-on-surface": "#233143",
+                        "tertiary-container": "#566175",
+                        "on-tertiary-container": "#d1dcf4",
+                        "tertiary-fixed-dim": "#bcc7de",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed-variant": "#3323cc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "space-unit": "4px",
+                        "chat-max-width": "800px",
+                        "container-padding": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #051424;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        /* Message bubble styles from design guidance */
+        .bubble-user {
+            background-color: #4F46E5;
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+
+        .bubble-ai {
+            background-color: #334155;
+            color: #f1f5f9;
+            border-bottom-left-radius: 0;
+        }
+
+        .chat-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-scrollbar::-webkit-scrollbar-thumb {
+            background: #273647;
+            border-radius: 10px;
+        }
+
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            background: rgba(18, 33, 49, 0.8);
+        }
+
+        .cyan-glow:focus-within {
+            box-shadow: 0 0 10px 2px rgba(6, 182, 212, 0.4);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SIDEBAR (SideNavBar) -->
+<aside class="fixed left-0 top-0 h-screen w-sidebar-width bg-surface-container border-r border-outline-variant flex flex-col p-4 z-50">
+<!-- Brand Header -->
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">Nexus Chat</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Inteligencia Artificial</p>
+</div>
+</div>
+<!-- CTA: Nuevo Chat -->
+<button class="flex items-center justify-center gap-2 w-full py-3 mb-6 bg-primary-container text-on-primary-container rounded-lg font-label-md text-label-md hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined">add_comment</span>
+<span>Nuevo Chat</span>
+</button>
+<!-- Navigation Tabs -->
+<nav class="flex-1 space-y-1 overflow-y-auto chat-scrollbar">
+<div class="px-2 py-1 mb-2">
+<p class="text-[10px] uppercase tracking-wider text-outline font-bold">Principal</p>
+</div>
+<a class="flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg border-l-4 border-primary group transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="font-label-md text-label-md">Chat Actual</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-md text-label-md">Descubrir</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-md text-label-md">Biblioteca</span>
+</a>
+<div class="px-2 py-1 mt-6 mb-2">
+<p class="text-[10px] uppercase tracking-wider text-outline font-bold">Historial</p>
+</div>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg group text-sm truncate" href="#">
+<span class="material-symbols-outlined text-sm">history</span>
+<span class="truncate">Planificación de viaje a Japón</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg group text-sm truncate" href="#">
+<span class="material-symbols-outlined text-sm">history</span>
+<span class="truncate">Depuración de código Python</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg group text-sm truncate" href="#">
+<span class="material-symbols-outlined text-sm">history</span>
+<span class="truncate">Resumen del libro "1984"</span>
+</a>
+</div>
+</nav>
+<!-- Footer Tab -->
+<div class="mt-auto pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Ajustes</span>
+</a>
+<div class="flex items-center gap-3 px-4 py-3 bg-surface-container-high rounded-xl mt-2">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-outline">
+<img class="w-full h-full object-cover" data-alt="Close-up portrait of a professional male software engineer with a modern aesthetic, soft studio lighting, cool blue and indigo color palette, minimalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiSLWXyIP1fKILDhtzBGDJim3RC4AQJTXk17UnCbWlfu0tBgXmv-MIw6ccyoLkLOmnHD8wvLzjqBnShyFGOIdgdm8xHwQtH-gY8sC7uLp0SaAsbSR0THOPsBqwdqI413wFMzVvaxryQaD2bHRKGG3mxuwYkGkM0k36fcnLICs_eSZCXWiKW0EfEEwUTkDKDyAdMN88lQIbDc-UTXJYwMIfCYsPVXcndTqJM-aYCaWepuCqAQKZPHIJpBkWdCtOs-giAUzcX9_iauA"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Perfil de Usuario</p>
+<p class="text-[10px] text-primary">Plan Pro</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="ml-sidebar-width flex flex-col h-screen relative">
+<!-- TOP NAV BAR (TopNavBar) -->
+<header class="fixed top-0 right-0 z-40 bg-surface/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center h-16 px-6 w-[calc(100%-280px)]">
+<div class="flex items-center gap-6">
+<!-- Model Selector -->
+<div class="flex items-center bg-surface-container-high p-1 rounded-lg">
+<button class="px-4 py-1.5 rounded-md font-label-md text-label-md text-primary font-bold border-b-2 border-primary">Nexus-1</button>
+<button class="px-4 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors">Nexus-Pro</button>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 px-3 py-1 bg-secondary-container/10 border border-secondary/30 rounded-full">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="text-[10px] font-bold text-secondary uppercase tracking-tighter">System Online</span>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+</header>
+<!-- CHAT AREA -->
+<section class="flex-1 overflow-y-auto chat-scrollbar pt-24 pb-32 px-gutter flex flex-col items-center">
+<div class="w-full max-w-chat-max-width space-y-8">
+<!-- Initial Suggestions / Welcome State (Only if chat is empty, here shown as part of history) -->
+<!-- Message: IA -->
+<div class="flex items-start gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex-1">
+<div class="bubble-ai p-4 rounded-xl font-body-md text-body-md leading-relaxed shadow-sm">
+                            ¡Hola! Soy Nexus Chat, tu asistente de inteligencia artificial. ¿En qué puedo ayudarte hoy? Podemos trabajar juntos en redacción, análisis de datos, programación o simplemente explorar conceptos complejos de forma sencilla.
+                        </div>
+<span class="text-[10px] text-outline mt-2 block ml-1">IA • Ahora</span>
+</div>
+</div>
+<!-- Suggested Prompts Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+<button class="p-4 bg-surface-container border border-outline-variant rounded-xl text-left hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-primary mb-2">mail</span>
+<p class="font-label-md text-label-md text-on-surface">Ayúdame a escribir un correo</p>
+<p class="text-[10px] text-outline mt-1">Formal o informal, tú decides el tono.</p>
+</button>
+<button class="p-4 bg-surface-container border border-outline-variant rounded-xl text-left hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-primary mb-2">science</span>
+<p class="font-label-md text-label-md text-on-surface">Explícame la computación cuántica</p>
+<p class="text-[10px] text-outline mt-1">Conceptos complejos para principiantes.</p>
+</button>
+<button class="p-4 bg-surface-container border border-outline-variant rounded-xl text-left hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-primary mb-2">code</span>
+<p class="font-label-md text-label-md text-on-surface">Revisa mi código de Python</p>
+<p class="text-[10px] text-outline mt-1">Optimización y corrección de bugs.</p>
+</button>
+<button class="p-4 bg-surface-container border border-outline-variant rounded-xl text-left hover:border-primary transition-all group">
+<span class="material-symbols-outlined text-primary mb-2">auto_awesome</span>
+<p class="font-label-md text-label-md text-on-surface">Dame ideas de contenido</p>
+<p class="text-[10px] text-outline mt-1">Para redes sociales o blogs personales.</p>
+</button>
+</div>
+<!-- Message: User -->
+<div class="flex items-start gap-4 flex-row-reverse animate-in fade-in slide-in-from-bottom-4 duration-500 delay-150">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div class="flex-1 flex flex-col items-end">
+<div class="bubble-user p-4 rounded-xl font-body-md text-body-md leading-relaxed shadow-lg">
+                            ¿Podrías darme un ejemplo de cómo funciona un algoritmo de búsqueda binaria en JavaScript?
+                        </div>
+<span class="text-[10px] text-outline mt-2 block mr-1">Tú • Hace 1 min</span>
+</div>
+</div>
+<!-- Message: IA Response -->
+<div class="flex items-start gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-primary shrink-0 border border-outline-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="flex-1">
+<div class="bubble-ai p-4 rounded-xl font-body-md text-body-md leading-relaxed shadow-sm space-y-4">
+<p>¡Claro que sí! La búsqueda binaria es un algoritmo eficiente para encontrar un elemento en una lista ordenada. Funciona dividiendo repetidamente a la mitad la porción de la lista que podría contener el elemento.</p>
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-lg font-mono text-sm text-secondary-fixed-dim overflow-x-auto">
+<pre><code>function binarySearch(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+
+  while (left &lt;= right) {
+    let mid = Math.floor((left + right) / 2);
+    if (arr[mid] === target) return mid;
+    if (arr[mid] &lt; target) left = mid + 1;
+    else right = mid - 1;
+  }
+  return -1;
+}</code></pre>
+</div>
+<p>¿Te gustaría que te explique línea por línea cómo funciona este código?</p>
+</div>
+<div class="flex items-center gap-2 mt-2 ml-1">
+<button class="p-1 hover:text-primary text-outline transition-colors">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1 hover:text-primary text-outline transition-colors">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+</button>
+<button class="p-1 hover:text-primary text-outline transition-colors">
+<span class="material-symbols-outlined text-[18px]">thumb_down</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CHAT INPUT (Floating Bar) -->
+<div class="absolute bottom-0 left-0 right-0 p-gutter flex justify-center pointer-events-none">
+<div class="w-full max-w-chat-max-width glass-effect border border-outline-variant rounded-2xl p-2 shadow-2xl pointer-events-auto cyan-glow transition-all">
+<div class="flex items-end gap-2 px-2">
+<button class="p-2.5 text-on-surface-variant hover:text-primary transition-colors rounded-lg">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 text-on-surface py-3 chat-scrollbar resize-none font-body-md text-body-md placeholder:text-outline" placeholder="Escribe un mensaje..." rows="1"></textarea>
+<div class="flex items-center gap-1 pb-1.5">
+<button class="p-2.5 text-on-surface-variant hover:text-primary transition-colors rounded-lg">
+<span class="material-symbols-outlined">mic</span>
+</button>
+<button class="bg-primary-container text-on-primary-container p-2.5 rounded-xl hover:brightness-110 transition-all shadow-lg active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between px-3 pb-1 pt-2">
+<div class="flex gap-4">
+<span class="text-[10px] text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">info</span>
+                            Nexus Chat puede cometer errores.
+                        </span>
+</div>
+<span class="text-[10px] text-outline">0/4000</span>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Auto-expand textarea
+        const tx = document.querySelector('textarea');
+        tx.setAttribute('style', 'height:' + (tx.scrollHeight) + 'px;overflow-y:hidden;');
+        tx.addEventListener("input", OnInput, false);
+
+        function OnInput() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            if (this.scrollHeight > 200) {
+                this.style.overflowY = 'scroll';
+                this.style.height = '200px';
+            } else {
+                this.style.overflowY = 'hidden';
+            }
+        }
+    </script>
+</body></html>

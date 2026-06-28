@@ -1,0 +1,78 @@
+# Nexus Chat
+
+Chat de inteligencia artificial con interfaz web moderna.
+
+## Stack
+- React 19 + Vite 8 (frontend)
+- Express 5 (backend API REST con SSE streaming)
+- Google Gemini API (`@google/genai` SDK)
+- Tailwind CSS 4 + highlight.js
+- Oxlint (linter)
+
+## Estructura del proyecto
+
+```
+nexus-chat/
+├── server/                        # Backend API
+│   ├── index.js                   # Express app con rate limiting (20 req/min)
+│   ├── routes/
+│   │   └── chat.js                # POST /api/chat y POST /api/chat/stream (SSE)
+│   └── services/
+│       └── gemini.js              # Gemini (generateContent + generateContentStream)
+├── src/
+│   ├── components/
+│   │   └── CommandPalette.jsx     # Paleta de comandos Ctrl+K
+│   ├── hooks/
+│   │   └── useChat.js             # Custom hook: streaming + estado + errores
+│   ├── layouts/
+│   │   ├── MainLayout.jsx         # Layout principal
+│   │   ├── Header.jsx             # Header con selector de modelo
+│   │   └── Sidebar.jsx            # Sidebar con botón Nuevo Chat funcional
+│   ├── pages/
+│   │   └── ChatPrincipal/
+│   │       ├── ChatPrincipal.jsx  # Página principal (Ctrl+K, eventos)
+│   │       └── components/
+│   │           ├── ConversationList.jsx  # Lista de mensajes + sugerencias
+│   │           ├── ChatInput.jsx         # Input con auto-resize
+│   │           └── MessageBubble.jsx     # Markdown + Copy + Like/Dislike
+│   ├── App.jsx                   # Punto de entrada
+│   ├── main.jsx                  # Mount de React
+│   └── index.css                 # Tema oscuro + estilos markdown
+├── public/
+├── dist/
+├── .env.example
+├── vite.config.js
+└── package.json
+```
+
+## Funcionalidades
+- Streaming en tiempo real (SSE) — la IA escribe carácter por carácter
+- Markdown renderizado (código con syntax highlighting, tablas, listas)
+- Botones de acción por mensaje: copiar, like/dislike
+- Adjuntar archivos: imágenes (PNG, JPEG, WebP, GIF), PDF, TXT — Gemini los analiza
+- Micrófono: Speech-to-Text con Web Speech API (Chrome/Edge)
+- Paleta de comandos (Ctrl+K): Nuevo Chat
+- Botón "Nuevo Chat" funcional en sidebar
+- Sugerencias iniciales se ocultan tras el primer mensaje
+- Rate limiting (20 req/min), validación de inputs
+- Modelo configurable via env (`GEMINI_MODEL`)
+
+## Backend API
+
+### POST /api/chat
+Body: `{ "messages": [...] }` → Response: `{ "role", "content", "time" }`
+
+### POST /api/chat/stream
+Body: `{ "messages": [...] }` → SSE: `data: {"content":"..."}\n\n`
+
+Rate limit: 20 req/min | Max mensajes: 50 | Max caracteres: 4000
+
+## Variables de entorno
+- `GEMINI_API_KEY` — API key de Google Gemini (requerida, obtener en https://aistudio.google.com/apikey)
+- `GEMINI_MODEL` — Modelo (default: gemini-2.5-flash)
+- `PORT` — Puerto del backend (default: 3001)
+
+## Seguridad
+- `.env` está en `.gitignore` — las API keys nunca se suben al repo
+- `opencode.json` usa variables de entorno, sin keys hardcodeadas
+- `.env.example` sirve como plantilla con placeholders
