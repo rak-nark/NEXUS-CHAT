@@ -70,6 +70,9 @@ npm run preview
 | `GEMINI_MODEL` | `gemini-2.5-flash` | No | Modelo de Gemini |
 | `PORT` | `3001` | No | Puerto del backend |
 
+
+`es posible que se descofiguren ciertos iconos, se recomienda poner el navegador en ingles para intentar solucionar `
+
 ## Licencia
 
 MIT
